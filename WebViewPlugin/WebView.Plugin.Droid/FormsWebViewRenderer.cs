@@ -8,6 +8,14 @@ using Xam.Plugin.Droid.Extras;
 using Xam.Plugin.Abstractions.Events.Outbound;
 using Xam.Plugin.Abstractions.Enumerations;
 using Xam.Plugin.Abstractions.Events.Inbound;
+using Android.Runtime;
+using Android.Webkit;
+using static Android.Webkit.WebChromeClient;
+using Plugin.FilePicker;
+using Plugin.FilePicker.Abstractions;
+using System.Threading.Tasks;
+using System.Threading;
+using Android.Content;
 
 [assembly: ExportRenderer(typeof(FormsWebView), typeof(Xam.Plugin.Droid.FormsWebViewRenderer))]
 namespace Xam.Plugin.Droid
@@ -47,7 +55,7 @@ namespace Xam.Plugin.Droid
         {
             WebViewControlDelegate.OnNavigationRequestedFromUser += OnUserNavigationRequested;
             WebViewControlDelegate.OnInjectJavascriptRequest += OnInjectJavascriptRequest;
-            WebViewControlDelegate.OnActionAdded += OnActionAdded;
+            WebViewControlDelegate.OnActionAdded += OnActionAdded;            
 
             var webView = new Android.Webkit.WebView(Forms.Context);
             webView.SetWebViewClient((WebViewClient = new FormsWebViewClient(element, this)));
@@ -55,6 +63,7 @@ namespace Xam.Plugin.Droid
 
             // Defaults
             webView.Settings.JavaScriptEnabled = true;
+            webView.Settings.AllowFileAccess = true;
 
             OnControlChanging?.Invoke(this, element, webView);
             SetNativeControl(webView);
